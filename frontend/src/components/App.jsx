@@ -28,9 +28,9 @@ const App = () => (
       <h1 className="text-center mt-5 mb-4">Welcome to Sluck Chat</h1>
       <BrowserRouter>
         <Routes>
+          <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/" element={<PrivatePage />} />
           <Route exact path="/error" element={<ErrorPage />} />
-          <Route exact path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>
     </div>
