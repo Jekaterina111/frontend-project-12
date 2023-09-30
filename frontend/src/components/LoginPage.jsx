@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import {
   Button, Form, Card, Container, Row, Col,
 } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
@@ -25,6 +25,7 @@ const LoginPage = () => {
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const formik = useFormik({
     initialValues: {
@@ -39,7 +40,7 @@ const LoginPage = () => {
         const res = await axios.post(routes.loginPath(), values);
         auth.login();
         localStorage.setItem('userInfo', JSON.stringify(res.data));
-        navigate('/');
+        navigate(location.state?.from || '/');
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
@@ -84,7 +85,7 @@ const LoginPage = () => {
                           ref={inputRef}
                         />
                       </Form.Group>
-                      <Form.Group>
+                      <Form.Group className="mt-3">
                         <Form.Label htmlFor="password">Пароль</Form.Label>
                         <Form.Control
                           type="password"
