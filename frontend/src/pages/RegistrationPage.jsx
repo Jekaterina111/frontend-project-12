@@ -6,12 +6,15 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
 
 const RegistrationPage = () => {
   const auth = useAuth();
-  const [registrationFailed, setRegistrationFailed] = useState(false);
+  const { t } = useTranslation();
+  const [registFailed, setRegistrationFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
 
@@ -19,20 +22,19 @@ const RegistrationPage = () => {
     inputRef.current.focus();
   }, []);
 
-  const registrationSchema = yup.object().shape({
+  const registrSchema = yup.object().shape({
     username: yup.string()
       .trim()
-      .min(5, 'Минимум 5 букв')
-      .max(50, 'Максимум 50 букв')
-      .required('Обязательное поле'),
+      .min(3, t('validation_errors.wrong_length'))
+      .max(20, t('validation_errors.wrong_length'))
+      .required(t('validation_errors.is_required')),
     password: yup.string()
       .trim()
-      .min(2, 'Минимум 2 буквы')
-      .max(50, 'Максимум 50 букв')
-      .required('Обязательное поле'),
+      .min(6, t('validation_errors.too_short'))
+      .required(t('validation_errors.is_required')),
     confirmation: yup.string()
-      .oneOf([yup.ref('password')])
-      .required('Обязательное поле'),
+      .oneOf([yup.ref('password')], t('validation_errors.passwords_must_match'))
+      .required(t('validation_errors.is_required')),
   });
 
   const formik = useFormik({
@@ -41,7 +43,7 @@ const RegistrationPage = () => {
       password: '',
       confirmation: '',
     },
-    validationSchema: registrationSchema,
+    validationSchema: registrSchema,
     onSubmit: async (values) => {
       setRegistrationFailed(false);
 
@@ -52,21 +54,24 @@ const RegistrationPage = () => {
         });
         localStorage.setItem('userInfo', JSON.stringify(res.data));
         auth.logIn(res.data);
+        toast.success(t('toast_messages.success'));
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
-        if (err.isAxiosError && err.response.status === 401) {
+        console.error(err.message);
+        if (err.isAxiosError && err.response.status === 409) {
           setRegistrationFailed(true);
           inputRef.current.select();
-          return;
+        } if (err.message === 'Network Error') {
+          toast.error(t('errors.network'));
         }
-        throw err;
       }
     },
   });
 
   return (
     <Container fluid className="h-100">
+      <ToastContainer />
       <Row className="h-100 justify-content-center align-content-center">
         <Col md={8} xxl={6}>
           <Card className="shadow-sm">
@@ -79,53 +84,59 @@ const RegistrationPage = () => {
                   <Form onSubmit={formik.handleSubmit}>
                     <fieldset>
                       <Form.Group>
-                        <h1 className="text-center mb-4">Войти</h1>
-                        <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                        <h1 className="text-center mb-4">{t('authorization.login')}</h1>
+                        <Form.Label htmlFor="username">{t('placeholders.username_ph')}</Form.Label>
                         <Form.Control
                           name="username"
-                          placeholder="Ваш ник"
+                          placeholder={t('placeholders.username_ph')}
                           id="username"
                           autoComplete="username"
                           value={formik.values.username}
                           onChange={formik.handleChange}
-                          isInvalid={registrationFailed}
+                          isInvalid={registFailed}
                           required
                           ref={inputRef}
                         />
-                        <Form.Control.Feedback type="invalid">Неверное имя пользователя</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid" tooltip>
+                          {formik.errors.username}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="mt-3">
-                        <Form.Label htmlFor="password">Пароль</Form.Label>
+                        <Form.Label htmlFor="password">{t('placeholders.password_ph')}</Form.Label>
                         <Form.Control
                           type="password"
                           name="password"
-                          placeholder="Пароль"
+                          placeholder={t('placeholders.password_ph')}
                           id="password"
                           value={formik.values.password}
                           onChange={formik.handleChange}
                           autoComplete="current-password"
-                          isInvalid={registrationFailed}
+                          isInvalid={registFailed}
                           required
                         />
-                        <Form.Control.Feedback type="invalid">Неверныи пароль</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid" tooltip>
+                          {formik.errors.password}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="mt-3">
-                        <Form.Label htmlFor="confirmation">Пароль</Form.Label>
+                        <Form.Label htmlFor="confirmation">{t('placeholders.password_сonfirmation_ph')}</Form.Label>
                         <Form.Control
                           type="password"
                           name="confirmation"
-                          placeholder="Пароль"
+                          placeholder={t('placeholders.password_сonfirmation_ph')}
                           id="confirmation"
                           value={formik.values.confirmation}
                           onChange={formik.handleChange}
                           autoComplete="confirmation"
-                          isInvalid={registrationFailed}
+                          isInvalid={registFailed}
                           required
                         />
-                        <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid" tooltip>
+                          {formik.errors.passwordConfirm}
+                        </Form.Control.Feedback>
                       </Form.Group>
-                      <Button type="submit" className="w-100 mb-3 mt-3 outline-primary">
-                        Войти
+                      <Button type="submit" className="w-100 mb-3 mt-3" variant="outline-primary">
+                        {t('authorization.signup_btn')}
                       </Button>
                     </fieldset>
                   </Form>

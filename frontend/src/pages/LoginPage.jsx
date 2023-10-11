@@ -45,12 +45,13 @@ const LoginPage = () => {
         navigate(from);
       } catch (err) {
         formik.setSubmitting(false);
+        console.error(err.message);
         if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.select();
-          return;
+        } if (err.message === 'Network Error') {
+          toast.error(t('auth_errors.unauthorized'));
         }
-        throw err(toast.error(t('auth_errors.unauthorized')));
       }
     },
   });
@@ -71,10 +72,11 @@ const LoginPage = () => {
                     <Form onSubmit={formik.handleSubmit}>
                       <Form.Group>
                         <h1 className="text-center mb-4">{t('authorization.login')}</h1>
-                        <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                        <Form.Label htmlFor="username">{t('placeholders.username_ph')}</Form.Label>
                         <Form.Control
                           type="username"
                           name="username"
+                          onBlur={formik.handleBlur}
                           placeholder={t('placeholders.username_ph')}
                           id="username"
                           autoComplete="username"
@@ -90,6 +92,7 @@ const LoginPage = () => {
                         <Form.Control
                           type="password"
                           name="password"
+                          onBlur={formik.handleBlur}
                           placeholder={t('placeholders.password_ph')}
                           id="password"
                           value={formik.values.password}
@@ -98,7 +101,7 @@ const LoginPage = () => {
                           isInvalid={authFailed}
                           required
                         />
-                        <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{t('auth_errors.unauthorized')}</Form.Control.Feedback>
                       </Form.Group>
                       <Button type="submit" className="w-100 mb-3 mt-3 outline-primary">
                         {t('authorization.login')}
@@ -110,8 +113,8 @@ const LoginPage = () => {
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span className="me-1">Нет аккаунта?</span>
-                <Link to="/signup">t(authorization.signup)</Link>
+                <span className="me-1">{t('authorization.confirm')}</span>
+                <Link to="/signup">{t('authorization.signup')}</Link>
               </div>
             </Card.Footer>
           </Card>
