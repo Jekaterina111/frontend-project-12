@@ -38,6 +38,7 @@ export default {
       signup: 'Register',
       signup_btn: 'Register',
       logout: 'Log-Out',
+      confirm: 'Don\'t have an account?',
     },
     placeholders: {
       username_ph: 'Your nickname',

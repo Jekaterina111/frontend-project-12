@@ -38,6 +38,7 @@ export default {
       signup: 'Регистрация',
       signup_btn: 'Зарегистрироваться',
       logout: 'Выйти',
+      confirm: 'Нет аккаунта?',
     },
     placeholders: {
       username_ph: 'Ваш ник',
