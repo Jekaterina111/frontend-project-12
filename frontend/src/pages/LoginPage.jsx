@@ -50,7 +50,7 @@ const LoginPage = () => {
           setAuthFailed(true);
           inputRef.current.select();
         } if (err.message === 'Network Error') {
-          toast.error(t('auth_errors.unauthorized'));
+          toast.error(t('toast_messages.server_lost'));
         }
       }
     },
@@ -58,7 +58,7 @@ const LoginPage = () => {
 
   return (
     <Container fluid className="h-100">
-      <h1 className="text-center mt-5 mb-4">Welcome to Sluck Chat</h1>
+      <h1 className="text-center mt-5 mb-4">{t('chat.greeting')}</h1>
       <Row className="h-100 justify-content-center align-content-center">
         <Col md={8} xxl={6}>
           <Card className="shadow-sm">

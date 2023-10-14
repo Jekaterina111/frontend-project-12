@@ -63,7 +63,7 @@ const RegistrationPage = () => {
           setRegistrationFailed(true);
           inputRef.current.select();
         } if (err.message === 'Network Error') {
-          toast.error(t('errors.network'));
+          toast.error(t('toast_messages.server_lost'));
         }
       }
     },

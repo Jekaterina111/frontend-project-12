@@ -7,7 +7,7 @@ const SwitchLang = () => {
   const { i18n } = useTranslation();
 
   const toggleLanguage = (e) => {
-    const { lang } = e.target.dataset.lang;
+    const { lang } = e.target.dataset;
     i18n.changeLanguage(lang);
   };
 

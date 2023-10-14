@@ -23,6 +23,7 @@ export default {
       channels: 'Channels',
       number_of_messages: '{{count}} msg',
       new_message: 'New message',
+      greeting: 'Welcome to Sluck Chat',
     },
     toast_messages: {
       success: 'Success!',
@@ -41,8 +42,8 @@ export default {
       confirm: 'Don\'t have an account?',
     },
     placeholders: {
-      username_ph: 'Your nickname',
-      username_reg_ph: 'Your name',
+      username_ph: 'Nickname',
+      username_reg_ph: 'Name',
       password_ph: 'Password',
       password_сonfirmation_ph: 'Confirm password',
       type_message: 'Enter your message...',

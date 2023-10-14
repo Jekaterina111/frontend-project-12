@@ -23,6 +23,7 @@ export default {
       channels: 'Каналы',
       number_of_messages: '{{count}} сообщений',
       new_message: 'Новое сообщение',
+      greeting: 'Добро пожаловать в Sluck Chat',
     },
     toast_messages: {
       success: 'Успешно!',
