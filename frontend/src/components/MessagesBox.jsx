@@ -5,6 +5,7 @@ import {
 } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
 
@@ -23,14 +24,21 @@ const MessagesBox = ({ channelId }) => {
     initialValues: {
       message: '',
     },
-    messageSchema: yup.object({
-      newMessage: yup.string().trim().min(1).required(),
+    validationSchema: yup.object({
+      message: yup.string().trim().min(1).required(),
     }),
     onSubmit: (values) => {
-      const newMessage = getMessage(values.message, channelId);
-      socket.emit('newMessage', newMessage);
-      formik.resetForm();
+      try {
+        const newMessage = getMessage(values.message, channelId);
+        socket.emit('newMessage', newMessage);
+        formik.resetForm();
+      } catch (err) {
+        toast.error((t('toast_messages.server_lost')));
+      }
+      formik.setSubmitting(false);
+      inputRef.current.focus();
     },
+    validateOnBlur: false,
   });
 
   useEffect(() => {
@@ -39,21 +47,20 @@ const MessagesBox = ({ channelId }) => {
 
   return (
     <div className="mt-auto px-5 py-3">
-      <Form className="py-1 border rounded-2" disabled={formik.isSubmitting} onSubmit={formik.handleSubmit}>
-        <InputGroup>
+      <Form className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
+        <InputGroup hasValidation>
           <FormControl
-            id="newMessage"
-            name="newMessage"
-            type="text"
+            id="message"
+            name="message"
             className="p-0 ps-2 border-0"
             placeholder={t('placeholders.type_message')}
             aria-label={t('chat.new_message')}
-            aria-describedby="submitBtn"
+            aria-describedby="submit-Btn"
             onChange={formik.handleChange}
             ref={inputRef}
             value={formik.values.message}
           />
-          <Button type="submit" id="submitBtn" variant="" className="btn-group-vertical border-0" disabled={!formik.values.message}>
+          <Button type="submit" variant="group-vertical" disabled={!formik.values.message}>
             <ArrowRightSquare size={20} />
             <span className="visually-hidden">{t('buttons.send')}</span>
           </Button>
