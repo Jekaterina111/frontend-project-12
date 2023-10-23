@@ -5,7 +5,7 @@ import {
   Button, Form, Card, Container, Row, Col,
 } from 'react-bootstrap';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/index.jsx';
@@ -13,9 +13,9 @@ import routes from '../routes.js';
 
 const LoginPage = () => {
   const { t } = useTranslation();
-  const loginSchema = yup.object().shape({
-    username: yup.string().required(t('validation_errors.is_required')),
-    password: yup.string().required(t('validation_errors.is_required')),
+  const loginSchema = Yup.object().shape({
+    username: Yup.string().required(t('validation_errors.is_required')),
+    password: Yup.string().required(t('validation_errors.is_required')),
   });
 
   const auth = useAuth();
@@ -40,7 +40,6 @@ const LoginPage = () => {
         const res = await axios.post(routes.loginPath(), values);
         localStorage.setItem('userInfo', JSON.stringify(res.data));
         auth.logIn();
-        toast.success(t('toast_messages.success'));
         const { from } = location.state;
         navigate(from);
       } catch (err) {
@@ -70,9 +69,8 @@ const LoginPage = () => {
                 <Col>
                   <fieldset disabled={formik.isSubmitting}>
                     <Form onSubmit={formik.handleSubmit}>
-                      <Form.Group>
-                        <h1 className="text-center mb-4">{t('authorization.login')}</h1>
-                        <Form.Label htmlFor="username">{t('placeholders.username_ph')}</Form.Label>
+                      <h1 className="text-center mb-4">{t('authorization.login')}</h1>
+                      <Form.Group className="mb-3">
                         <Form.Control
                           type="username"
                           name="username"
@@ -82,13 +80,19 @@ const LoginPage = () => {
                           autoComplete="username"
                           value={formik.values.username}
                           onChange={formik.handleChange}
-                          isInvalid={authFailed}
+                          isInvalid={
+                            (formik.errors.username && formik.touched.username)
+                            || authFailed
+                          }
                           required
                           ref={inputRef}
                         />
+                        <Form.Label htmlFor="username">{t('placeholders.username_ph')}</Form.Label>
+                        <Form.Control.Feedback type="invalid" tooltip placement="right">
+                          {t(formik.errors.username)}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="mt-3">
-                        <Form.Label htmlFor="password">{t('placeholders.password_ph')}</Form.Label>
                         <Form.Control
                           type="password"
                           name="password"
@@ -98,10 +102,14 @@ const LoginPage = () => {
                           value={formik.values.password}
                           onChange={formik.handleChange}
                           autoComplete="current-password"
-                          isInvalid={authFailed}
+                          isInvalid={
+                            (formik.errors.password && formik.touched.password)
+                            || authFailed
+                          }
                           required
                         />
-                        <Form.Control.Feedback type="invalid">{t('auth_errors.unauthorized')}</Form.Control.Feedback>
+                        <Form.Label htmlFor="password">{t('placeholders.password_ph')}</Form.Label>
+                        <Form.Control.Feedback type="invalid" tooltip>{t(formik.errors.password)}</Form.Control.Feedback>
                       </Form.Group>
                       <Button type="submit" className="w-100 mb-3 mt-3 outline-primary">
                         {t('authorization.login')}
