@@ -2,22 +2,20 @@ import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Navbar, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import AuthButton from './AuthButton';
 import SwitchLang from './SwitchLang';
 
 const Header = () => {
   const { t } = useTranslation();
   return (
-    <div>
-      <Navbar bg="light" expand="lg">
-        <SwitchLang />
+    <>
+      <Navbar bg="white" expand="lg" className="light shadow-sm">
         <Container>
-          <Navbar.Brand as={Link} to="/">{t('logo')}</Navbar.Brand>
-          <AuthButton />
+          <Navbar.Brand as={Link} to="/login">{t('logo')}</Navbar.Brand>
+          <SwitchLang />
         </Container>
       </Navbar>
       <Outlet />
-    </div>
+    </>
   );
 };
 
