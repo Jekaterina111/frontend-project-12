@@ -6,6 +6,7 @@ export default {
         add: 'Добавить канал',
         remove: 'Удалить канал',
         rename: 'Переименовать канал',
+        channelAlreadyExists: 'Такой канал уже существует',
       },
       body: {
         confirmation: 'Уверены?',

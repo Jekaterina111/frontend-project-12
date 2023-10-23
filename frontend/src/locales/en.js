@@ -6,6 +6,7 @@ export default {
         add: 'Add Channel',
         remove: 'Delete Channel',
         rename: 'Rename Channel',
+        channelAlreadyExists: 'Channel already exists',
       },
       body: {
         confirmation: 'Are you sure?',
@@ -54,7 +55,7 @@ export default {
     },
     validation_errors: {
       wrong_length: 'Minimum 3 Maximum 20 symbols',
-      too_short: 'At least 6 символов',
+      too_short: 'At least 6 symbols',
       passwords_must_match: 'Passwords should match!',
       too_big: 'Too long',
       is_required: 'Required!',

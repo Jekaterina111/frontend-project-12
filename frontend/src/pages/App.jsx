@@ -40,8 +40,8 @@ const PrivateRoute = ({ children }) => {
 const App = () => (
   <AuthProvider>
     <Router>
-      <Header />
-      <div className="container p-3">
+      <div className="container d-flex flex-column h-100">
+        <Header />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<ErrorPage />} />
