@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/Jekaterina111/frontend-project-12#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.3"
+    "@hexlet/chat-server": "^2.0.3",
+    "formik": "^2.4.5",
+    "normalize.css": "^8.0.1",
+    "yup": "^1.4.0"
   }
 }
