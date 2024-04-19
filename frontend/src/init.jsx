@@ -1,7 +1,10 @@
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import App from './components/App';
+import { BrowserRouter } from 'react-router-dom';
+import './index.css';
+import App from './App.jsx';
 import resources from './locales/index.js';
+import React from 'react';
 
 const init = async () => {
   const i18n = i18next.createInstance();
@@ -14,9 +17,13 @@ const init = async () => {
     });
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <App />
-    </I18nextProvider>
+    <React.StrictMode>
+        <BrowserRouter>
+         <I18nextProvider i18n={i18n}>
+          <App />
+         </I18nextProvider>
+       </BrowserRouter>
+    </React.StrictMode>
   );
 };
 
