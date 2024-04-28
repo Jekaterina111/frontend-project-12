@@ -1,5 +1,7 @@
 import ru from './ru';
 
-export default {
+const langObject = {
   ru,
 };
+
+export default langObject;
