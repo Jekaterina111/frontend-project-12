@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client';
+import "normalize.css";
 import init from './init.jsx';
 
 const app = async () => {
