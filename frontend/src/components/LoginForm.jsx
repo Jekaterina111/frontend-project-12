@@ -1,34 +1,10 @@
-import { Formik, Form, Field } from 'formik';
+import { Formik } from 'formik';
 import avatar from '../assets/avatar.jpg';
-import styled from 'styled-components';
-import { Button } from './Button';
+import { 
+  MainContainer, FormContainer, Title, ImgContainer, Form, Label, Input, Button 
+} from './theme';
 
-const MainContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100vh;
-`
-const FormContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 80%
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: var(--shadow);
-`
 
-const ImgContainer = styled.div`
-   width: 50%;
-   height: 50%;
-   object-fit: cover;
-`
-const StyledLabel = styled.label`
-    font-size: 16px;
-    color: #333;
-`
 export const LoginForm = () => {
      return (
         <MainContainer>
@@ -46,18 +22,18 @@ export const LoginForm = () => {
                 </ImgContainer>
 
                 <Form>
-                    <h1>Vojti</h1>
+                    <Title>Vojti</Title>
                   <div className="form-group">
-                    <StyledLabel htmlFor="email">Email</StyledLabel>
-                    <Field
+                    <Label htmlFor="email">Email</Label>
+                    <Input
                       type="email"
                       name="email"
                       className="form-control"
                     />
                   </div>
                   <div className="form-group">
-                    <StyledLabel htmlFor="password">Password</StyledLabel>
-                    <Field
+                    <Label htmlFor="password">Password</Label>
+                    <Input
                       type="password"
                       name="password"
                       className="form-control"
